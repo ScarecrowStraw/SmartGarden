@@ -20,7 +20,7 @@ void loop() {
       digitalWrite(relay, HIGH);
       Serial.println("ON");    
     }
-    else {
+    else if (state == "0"){
       digitalWrite(relay, LOW);
       Serial.println("OFF");
     }
