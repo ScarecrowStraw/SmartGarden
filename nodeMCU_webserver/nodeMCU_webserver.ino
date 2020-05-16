@@ -16,7 +16,7 @@ ESP8266WebServer server(80); //Server on port 80
 
 //---------------------------------------------------------------
 //Our HTML webpage contents in program memory
-String MAIN_page = "=====(
+String MAIN_page = " =====(
 <!DOCTYPE html>
 <html>
 <body>
