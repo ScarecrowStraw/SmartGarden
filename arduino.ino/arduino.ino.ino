@@ -19,11 +19,11 @@ void loop() {
 
     Serial.print(" I received:");
     Serial.println(state);
-    if(state == "1"){
+    if(state[0] == '1'){
       digitalWrite(relay, HIGH);
       Serial.println("ON");    
     }
-    else if (state == "0"){
+    else if (state[0] == '0'){
       digitalWrite(relay, LOW);
       Serial.println("OFF");
     }
