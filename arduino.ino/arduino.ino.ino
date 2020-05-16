@@ -1,3 +1,4 @@
+#include <SoftwareSerial.h>
 
 // Relay pin is controlled with D8. The active wire is connected to Normally Closed and common
 int relay = 8;
