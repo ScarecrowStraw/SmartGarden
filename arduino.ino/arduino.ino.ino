@@ -1,5 +1,7 @@
 #include <SoftwareSerial.h>
 
+SoftwareSerial mySerial(2, 3); // RX, TX
+
 // Relay pin is controlled with D8. The active wire is connected to Normally Closed and common
 int relay = 8;
 String state = "0";
@@ -8,11 +10,12 @@ void setup() {
   // Pin for relay module set as output
   pinMode(relay, OUTPUT);
   Serial.begin(9600);
+  mySerial.begin(9600);
 }
 
 void loop() {
-  if(Serial.available() > 0){
-    state = Serial.readStringUntil('\n'); // read the incoming byte:
+  if(mySerial.available() > 0){
+    state = mySerial.readStringUntil('\n');
 
     Serial.print(" I received:");
     Serial.println(state);
@@ -25,5 +28,4 @@ void loop() {
       Serial.println("OFF");
     }
   }
-  delay(50);
 }
