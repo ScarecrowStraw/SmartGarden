@@ -3,10 +3,20 @@
 
 //ESP Web Server Library to host a web page
 #include <ESP8266WebServer.h>
+#include <ESP8266mDNS.h>
+
+#define LED 2  
+
+//SSID and Password of your WiFi router
+const char* ssid = "Chiem Su";
+const char* password = "39909398";
+
+//Declare a global object variable from the ESP8266WebServer class.
+ESP8266WebServer server(80); //Server on port 80
 
 //---------------------------------------------------------------
 //Our HTML webpage contents in program memory
-const char MAIN_page[] PROGMEM = R"=====(
+String MAIN_page = "=====(
 <!DOCTYPE html>
 <html>
 <body>
@@ -20,17 +30,10 @@ Ciclk to turn <a href="ledOff">LED OFF</a><br>
 
 </body>
 </html>
-)=====";
+)===== ";
 //---------------------------------------------------------------
 //On board LED Connected to GPIO2
-#define LED 2  
 
-//SSID and Password of your WiFi router
-const char* ssid = "Chiem Su";
-const char* password = "39909398";
-
-//Declare a global object variable from the ESP8266WebServer class.
-ESP8266WebServer server(80); //Server on port 80
 
 //===============================================================
 // This routine is executed when you open its IP in browser
@@ -56,8 +59,8 @@ void handleLEDoff() {
 //                  SETUP
 //==============================================================
 void setup(void){
-  Serial.begin(115200);
-  
+  Serial.begin(9600);
+  ESP.eraseConfig();
   WiFi.begin(ssid, password);     //Connect to your WiFi router
   Serial.println("");
 
@@ -78,7 +81,11 @@ void setup(void){
   Serial.println(ssid);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());  //IP address assigned to your ESP
- 
+  
+  if (MDNS.begin("esp8266")) {
+    Serial.println("MDNS responder started");
+  }
+  
   server.on("/", handleRoot);      //Which routine to handle at root location. This is display page
   server.on("/ledOn", handleLEDon); //as Per  <a href="ledOn">, Subroutine to be called
   server.on("/ledOff", handleLEDoff);
@@ -91,4 +98,5 @@ void setup(void){
 //==============================================================
 void loop(void){
   server.handleClient();          //Handle client requests
+  delay(1);
 }
