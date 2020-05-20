@@ -60,7 +60,7 @@ void setup(void){
     "</head>"
     "<body>"
     " Test HTML bla bla !!! "
-    "<body>"
+    "</body>"
     "</html>"
     );
   });
