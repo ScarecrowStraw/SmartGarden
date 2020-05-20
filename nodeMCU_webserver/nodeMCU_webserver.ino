@@ -50,7 +50,19 @@ void setup(void){
 
   server.on("/",[]{
     Serial.println(String("Co ng truy cap") + count++);
-    server.send(200, "text/plain", String("Ngao roi")+ count);
+    server.send(200, "text/html",
+    "<meta charset='utf-8'>"
+    "<html>"
+    "<head>"
+    "<title>"
+    "NodeMCU"
+    "</title>"
+    "</head>"
+    "<body>"
+    " Test HTML bla bla !!! "
+    "<body>"
+    "</html>"
+    );
   });
   server.begin();                  //Start server
   Serial.println("HTTP server started");
