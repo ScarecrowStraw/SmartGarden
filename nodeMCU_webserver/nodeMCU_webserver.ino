@@ -50,7 +50,7 @@ void setup(void){
 
   server.on("/",[]{
     Serial.println(String("Co ng truy cap") + count++);
-    server.send(200, "text/plain", "Ngao roi");
+    server.send(200, "text/plain", String("Ngao roi")+ count);
   });
   server.begin();                  //Start server
   Serial.println("HTTP server started");
