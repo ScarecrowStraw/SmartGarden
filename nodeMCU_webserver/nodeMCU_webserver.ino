@@ -8,21 +8,12 @@
 #define LED 2  
 
 //SSID and Password of your WiFi router
-const char* ssid = "Chiem Su";
-const char* password = "39909398";
+const char* ssid = "TP-Link_C78F";
+const char* password = "0123456@";
 int count = 0;
 
 //Declare a global object variable from the ESP8266WebServer class.
 ESP8266WebServer server(80); //Server on port 80
-
-//===============================================================
-// This routine is executed when you open its IP in browser
-//===============================================================
-void handleRoot() {
- Serial.println("You called root page");
- String s = MAIN_page; //Read HTML contents
- server.send(200, "text/html", s); //Send web page
-}
 
 //==============================================================
 //                  SETUP
@@ -59,7 +50,7 @@ void setup(void){
 
   server.on("/",[]{
     Serial.println(String("Co ng truy cap") + count++);
-    sv.send(200, "text/plain", "Ngao roi");
+    server.send(200, "text/plain", "Ngao roi");
   });
   server.begin();                  //Start server
   Serial.println("HTTP server started");
