@@ -1,5 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
+#include <NTPClient.h>
+#include <WiFiUdp.h>
 
 //ESP Web Server Library to host a web page
 #include <ESP8266WebServer.h>
@@ -11,6 +13,14 @@
 const char* ssid = "TP-Link_C78F";
 const char* password = "0123456@";
 int count = 0;
+
+const long utcOffsetInSeconds = 3600;
+
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+// Define NTP Client to get time
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
 
 const char MAIN_page[] PROGMEM = R"=====(
 <!DOCTYPE html>
@@ -39,7 +49,7 @@ void handleRoot() {
     "<html>"
     "<head>"
     "<title>"
-    "NodeMCU"
+    "NodeMCU"      
     "</title>"
     "</head>"
     "<body>"
@@ -58,6 +68,17 @@ void handleLEDoff() {
  Serial.println("LED off page");
  digitalWrite(LED,HIGH); //LED off
  server.send(200, "text/html", "LED is OFF"); //Send ADC value only to client ajax request
+}
+
+void getTime() {
+  Serial.print(daysOfTheWeek[timeClient.getDay()]);
+  Serial.print(", ");
+  Serial.print(timeClient.getHours());
+  Serial.print(":");
+  Serial.print(timeClient.getMinutes());
+  Serial.print(":");
+  Serial.println(timeClient.getSeconds());
+  server.send(200, "text/plain", String(timeClient.getFormattedTime()) + "\t" + String(daysOfTheWeek[timeClient.getDay()]));
 }
 
 //==============================================================
@@ -89,6 +110,8 @@ void setup(void){
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());  //IP address assigned to your ESP
   
+  timeClient.begin();
+  
   if (MDNS.begin("esp8266")) {
     Serial.println("MDNS responder started");
   }
@@ -96,6 +119,7 @@ void setup(void){
   server.on("/", handleRoot);      //Which routine to handle at root location. This is display page
   server.on("/ledOn", handleLEDon); //as Per  <a href="ledOn">, Subroutine to be called
   server.on("/ledOff", handleLEDoff);
+  server.on("/time", getTime);
   server.begin();                  //Start server
   Serial.println("HTTP server started");
 }
@@ -104,5 +128,6 @@ void setup(void){
 //==============================================================
 void loop(void){
   server.handleClient();          //Handle client requests
+  timeClient.update();
   delay(1);
 }
