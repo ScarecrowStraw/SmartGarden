@@ -1,6 +1,9 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 
+#include <NTPClient.h>
+#include <WiFiUdp.h>
+
 //ESP Web Server Library to host a web page
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
@@ -11,6 +14,14 @@ const char* password = "0123456@";
 
 int LED = 16; // GPIO16 (D0)
 WiFiServer server(80);
+
+const long utcOffsetInSeconds = 3600;
+
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+// Define NTP Client to get time
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
 
 void setup(){
   Serial.begin(115200);
@@ -78,6 +89,7 @@ void loop(){
   client.println("<br><br>");
   client.println("<a href=\"/LED=ON\"\"><button>ON</button></a>");
   client.println("<a href=\"/LED=OFF\"\"><button>OFF</button></a><br />");
+  client.println(String(timeClient.getFormattedTime()) + "\t" + String(daysOfTheWeek[timeClient.getDay()]));
   client.println("</html>");
   
   delay(1);
