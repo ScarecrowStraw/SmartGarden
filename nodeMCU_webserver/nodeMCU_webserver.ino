@@ -7,7 +7,7 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 
-#define LED 2  
+#define LED 4  
 
 //SSID and Password of your WiFi router
 const char* ssid = "TP-Link_C78F";
@@ -22,40 +22,39 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
 
-const char MAIN_page[] PROGMEM = R"=====(
-<!DOCTYPE html>
-<html>
-<body>
-<center>
-<h1>WiFi LED on off demo: 1</h1><br>
-Ciclk to turn <a href="ledOn">LED ON</a><br>
-Ciclk to turn <a href="ledOff">LED OFF</a><br>
-<hr>
-<a href="https://circuits4you.com">circuits4you.com</a>
-</center>
- 
-</body>
-</html>
-)=====";
+const char MAIN_page[] PROGMEM = R"rawliteral(
+    <meta charset='utf-8'>
+    <html>
+    <head>
+    <title>
+    NodeMCU      
+    </title>
+    </head>
+    <body>
+     Test HTML bla bla !!!
+    </body>
+    </html>
+)rawliteral";
 
 //Declare a global object variable from the ESP8266WebServer class.
 ESP8266WebServer server(80); //Server on port 80
 
 void handleRoot() {
  Serial.println("You called root page");
-// String s = MAIN_page; //Read HTML contents
- server.send(200, "text/html",
-  "<meta charset='utf-8'>"
-    "<html>"
-    "<head>"
-    "<title>"
-    "NodeMCU"      
-    "</title>"
-    "</head>"
-    "<body>"
-    " Test HTML bla bla !!! "
-    "</body>"
-    "</html>");
+ String s = MAIN_page; //Read HTML contents
+ server.send(200, "text/html", MAIN_page);
+// server.send(200, "text/html",
+//  "<meta charset='utf-8'>"
+//    "<html>"
+//    "<head>"
+//    "<title>"
+//    "NodeMCU"      
+//    "</title>"
+//    "</head>"
+//    "<body>"
+//    " Test HTML bla bla !!! "
+//    "</body>"
+//    "</html>");
 }
  
 void handleLEDon() { 
