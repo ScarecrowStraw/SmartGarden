@@ -6,6 +6,18 @@ SoftwareSerial mySerial(2, 3); // RX, TX
 int relay = 8;
 String state = "0";
 
+char check(String state){
+  for (int i = 0; i < state.length(); i++){
+    if (state[i] == '0'){
+      return '0';
+    }
+    if (state[i] == '1'){
+      return '1';
+    }
+  }
+  return 'n';
+}
+
 void setup() {
   // Pin for relay module set as output
   pinMode(relay, OUTPUT);
@@ -20,11 +32,11 @@ void loop() {
 
     Serial.print(" I received:");
     Serial.println(state);
-    if(state[0] == '0'){
+    if(check(state) == '0'){
       digitalWrite(relay, HIGH);
       Serial.println("ON");    
     }
-    else if (state[0] == '1'){
+    else if (check(state) == '1'){
       digitalWrite(relay, LOW);
       Serial.println("OFF");
     }
