@@ -1,27 +1,20 @@
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h>
+#include <time.h>
 
-#include <NTPClient.h>
 #include <WiFiUdp.h>
-
-//ESP Web Server Library to host a web page
-#include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
+ 
+#include <NTPClient.h>               // Include NTPClient library
 
 //SSID and Password of your WiFi router
 const char* ssid = "TP-Link_C78F";
 const char* password = "0123456@";
 
 int LED = 16; // GPIO16 (D0)
+
+int timezone = 7 * 3600;
+int dst = 0;
+
 WiFiServer server(80);
-
-const long utcOffsetInSeconds = 3600;
-
-char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
-// Define NTP Client to get time
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
 
 void setup(){
   Serial.begin(115200);
@@ -42,10 +35,20 @@ void setup(){
   Serial.print("Copy and paste the following URL: https://");
   Serial.print(WiFi.localIP());
   Serial.println("/");
+//  configTime(timezone, dst, "pool.ntp.org","time.nist.gov");
+//  Serial.println("\nWaiting for Internet time");
+//
+//  while(!time(nullptr)){
+//     Serial.print("*");
+//     delay(1000);
+//  }
+//  Serial.println("\nTime response....OK");
 }
 
 void loop(){
   WiFiClient client = server.available();
+//  time_t now = time(nullptr);
+//  struct tm* p_tm = localtime(&now);
   if (!client){
     return;}
     
@@ -89,7 +92,19 @@ void loop(){
   client.println("<br><br>");
   client.println("<a href=\"/LED=ON\"\"><button>ON</button></a>");
   client.println("<a href=\"/LED=OFF\"\"><button>OFF</button></a><br />");
-  client.println(String(timeClient.getFormattedTime()) + "\t" + String(daysOfTheWeek[timeClient.getDay()]));
+//  client.print(String(p_tm->tm_mday));
+//  client.print("/");
+//  client.print(String(p_tm->tm_mon + 1));
+//  client.print("/");
+//  client.print(String(p_tm->tm_year + 1900));
+//  
+//  client.print(" ");
+//  
+//  client.print(String(p_tm->tm_hour));
+//  client.print(":");
+//  client.print(String(p_tm->tm_min));
+//  client.print(":");
+//  client.println(String(p_tm->tm_sec));
   client.println("</html>");
   
   delay(1);
