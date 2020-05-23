@@ -6,8 +6,8 @@ SoftwareSerial mySerial(13, 15); // RX, TX
 String cmd;
 
 //SSID and Password of your WiFi router
-const char* ssid = "TP-Link_C78F";
-const char* password = "0123456@";
+const char* ssid = "000000000";
+const char* password = "11112222";
 
 WiFiServer server(80);
 
