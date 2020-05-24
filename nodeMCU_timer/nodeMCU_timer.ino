@@ -7,6 +7,9 @@
 const char* ssid = "000000000";
 const char* password = "11112222";
 
+int wait_time = 2;
+int run_time = 1;
+
 const long utcOffsetInSeconds = 3600;
 
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -48,21 +51,44 @@ void setup() {
   Serial.println(WiFi.localIP());  //IP address assigned to your ESP
   
   timeClient.begin();
+  Serial.println(getTime());
 }
 
-//int last_time_1 = getTime();
+int last_time_1 = getTime();
 //int last_time_2 = getTime();
+int state = 0;
 void loop() {
   timeClient.update();
-  getTime();
-  int getTime1 = getTime();
-  Serial.println(getTime1);
-//  if (getTime() - last_time_1 > 2){
-//    Serial.println("Turn on");
-//    last_time_1 = getTime();
-//    last_time_2 = getTime();
-//  }
-//  if (getTime() - last_time_2 > 1){
-//    Serial.print("Turn off");
-//  }
+//  getTime();
+//  int getTime1 = getTime();
+//  Serial.println(getTime1);
+  if ((getTime() - last_time_1 >= wait_time) && state == 0){
+    Serial.println(getTime());
+    Serial.println("Turn on");
+    state = 1;
+  }
+  if ((getTime() - last_time_1 >= (run_time + wait_time)) && state == 1){
+    Serial.println(getTime());
+    Serial.println("Turn off");
+    state = 0;
+    last_time_1 = getTime();
+    Serial.println("Last time :");
+    Serial.println(last_time_1);
+    
+  }
+
+  if ((getTime() - last_time_1) < 0){
+    int check = 60 - last_time_1 + getTime();
+    if ((check > wait_time) && state == 0){
+      Serial.println(getTime());
+      Serial.println("Turn on");
+      state = 1;
+    }
+    if(check > (run_time + wait_time) && state == 1){
+      Serial.println(getTime());
+      Serial.println("Turn off");
+      state = 0;
+      last_time_1 = getTime(); 
+    }
+  }
 }
