@@ -11,24 +11,26 @@ const long utcOffsetInSeconds = 3600;
 
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
-// Define NTP Client to get time
+// int last_time_1 = 0;// Define NTP Client to get time
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
 
-void getTime() {
-  Serial.print(daysOfTheWeek[timeClient.getDay()]);
-  Serial.print(", ");
-  Serial.print(timeClient.getHours());
-  Serial.print(":");
-  Serial.print(timeClient.getMinutes());
-  Serial.print(":");
-  Serial.println(timeClient.getSeconds());
+int getTime() {
+//  Serial.print(daysOfTheWeek[timeClient.getDay()]);
+//  Serial.print(", ");
+//  Serial.print(timeClient.getHours());
+//  Serial.print(":");
+//  Serial.print(timeClient.getMinutes());
+//  Serial.print(":");
+//  Serial.println(timeClient.getSeconds());
 //  server.send(200, "text/plain", String(timeClient.getFormattedTime()) + "\t" + String(daysOfTheWeek[timeClient.getDay()]));
-//  return timeClient.getMinutes();
+  int something = timeClient.getMinutes();
+  return something;
 }
 
 void setup() {
   Serial.begin(9600);
+  ESP.eraseConfig();
   WiFi.begin(ssid, password);     //Connect to your WiFi router
   Serial.println("");
   
@@ -48,7 +50,19 @@ void setup() {
   timeClient.begin();
 }
 
+//int last_time_1 = getTime();
+//int last_time_2 = getTime();
 void loop() {
   timeClient.update();
   getTime();
+  int getTime1 = getTime();
+  Serial.println(getTime1);
+//  if (getTime() - last_time_1 > 2){
+//    Serial.println("Turn on");
+//    last_time_1 = getTime();
+//    last_time_2 = getTime();
+//  }
+//  if (getTime() - last_time_2 > 1){
+//    Serial.print("Turn off");
+//  }
 }
