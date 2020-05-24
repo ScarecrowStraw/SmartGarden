@@ -1,15 +1,41 @@
 #include <SoftwareSerial.h>
 #include <ESP8266WiFi.h>
 
+#include <NTPClient.h>
+#include <WiFiUdp.h>
+
 SoftwareSerial mySerial(13, 15); // RX, TX
 
 String cmd;
+int wait_time = 2;
+int run_time = 1;
 
 //SSID and Password of your WiFi router
 const char* ssid = "000000000";
 const char* password = "11112222";
 
+const long utcOffsetInSeconds = 3600;
+
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+// int last_time_1 = 0;// Define NTP Client to get time
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
+
 WiFiServer server(80);
+
+int getTime() {
+//  Serial.print(daysOfTheWeek[timeClient.getDay()]);
+//  Serial.print(", ");
+//  Serial.print(timeClient.getHours());
+//  Serial.print(":");
+//  Serial.print(timeClient.getMinutes());
+//  Serial.print(":");
+//  Serial.println(timeClient.getSeconds());
+//  server.send(200, "text/plain", String(timeClient.getFormattedTime()) + "\t" + String(daysOfTheWeek[timeClient.getDay()]));
+  int something = timeClient.getMinutes();
+  return something;
+}
 
 void setup()
 {
@@ -19,6 +45,7 @@ void setup()
   mySerial.begin(9600);
 //  mySerial.println("Hello, world?");
   Serial.println("Hello");
+  ESP.eraseConfig();
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -27,6 +54,7 @@ void setup()
   }
   Serial.println("WiFi connected"); 
   server.begin();
+  timeClient.begin();
   Serial.println("Server started");
   Serial.print("IP Address of network: "); // will IP address on Serial Monitor
   Serial.println(WiFi.localIP());
@@ -34,15 +62,11 @@ void setup()
   Serial.print(WiFi.localIP());
   Serial.println("/");
 }
+int last_time_1 = getTime();
+int state = 0;
 
 void loop() // run over and over
 {
-  if (Serial.available() > 0){
-    cmd = Serial.readStringUntil('\n');
-    Serial.println(cmd);
-    mySerial.println(cmd);
-  }
-
   WiFiClient client = server.available();
   if (!client){
     return;}
@@ -56,14 +80,43 @@ void loop() // run over and over
   Serial.println(request);
   client.flush();
   
+  if ((getTime() - last_time_1 >= wait_time) && state == 0){
+    Serial.println(getTime());
+    Serial.println("Turn on");
+    state = 1;
+  }
+  if ((getTime() - last_time_1 >= (run_time + wait_time)) && state == 1){
+    Serial.println(getTime());
+    Serial.println("Turn off");
+    state = 0;
+    last_time_1 = getTime();
+    Serial.println("Last time :");
+    Serial.println(last_time_1);
+    
+  }
+  if ((getTime() - last_time_1) < 0){
+    int check = 60 - last_time_1 + getTime();
+    if ((check > wait_time) && state == 0){
+      Serial.println(getTime());
+      Serial.println("Turn on");
+      state = 1;
+    }
+    if(check > (run_time + wait_time) && state == 1){
+      Serial.println(getTime());
+      Serial.println("Turn off");
+      state = 0;
+      last_time_1 = getTime(); 
+    }
+  }
+  
   int value = HIGH;
-  if(request.indexOf("/Pump=ON") != -1){
+  if(state == 0){
     
     mySerial.println("1");
     value = LOW;
   }
 
-  if(request.indexOf("/Pump=OFF") != -1){
+  if(state == 1){
 
     mySerial.println("0");
     value = HIGH;
@@ -85,8 +138,7 @@ void loop() // run over and over
     client.print("ON");
   }
   client.println("<br><br>");
-  client.println("<a href=\"/Pump=ON\"\"><button>ON</button></a>");
-  client.println("<a href=\"/Pump=OFF\"\"><button>OFF</button></a><br />");
+  client.println(String(timeClient.getFormattedTime()) + "\t" + String(daysOfTheWeek[timeClient.getDay()]));
   client.println("</html>");
   
   delay(1);
