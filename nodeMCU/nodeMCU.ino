@@ -7,12 +7,12 @@
 SoftwareSerial mySerial(13, 15); // RX, TX
 
 String cmd;
-int wait_time = 2;
+int wait_time = 6;
 int run_time = 1;
 
 //SSID and Password of your WiFi router
-const char* ssid = "000000000";
-const char* password = "11112222";
+const char* ssid = "TP-Link_C78F";
+const char* password = "0123456@";
 
 const long utcOffsetInSeconds = 3600;
 
@@ -24,7 +24,7 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
 
 WiFiServer server(80);
 
-int getTime() {
+int getTimeMinutes() {
 //  Serial.print(daysOfTheWeek[timeClient.getDay()]);
 //  Serial.print(", ");
 //  Serial.print(timeClient.getHours());
@@ -34,6 +34,11 @@ int getTime() {
 //  Serial.println(timeClient.getSeconds());
 //  server.send(200, "text/plain", String(timeClient.getFormattedTime()) + "\t" + String(daysOfTheWeek[timeClient.getDay()]));
   int something = timeClient.getMinutes();
+  return something;
+}
+
+int getTimeHours(){
+  int something = timeClient.getHours();
   return something;
 }
 
@@ -62,8 +67,10 @@ void setup()
   Serial.print(WiFi.localIP());
   Serial.println("/");
 }
-int last_time_1 = getTime();
+int last_time = getTimeHours();
+int last_time_1 = getTimeMinutes();
 int state = 0;
+int state_1 = 0;
 
 void loop() // run over and over
 {
@@ -80,34 +87,36 @@ void loop() // run over and over
   Serial.println(request);
   client.flush();
   
-  if ((getTime() - last_time_1 >= wait_time) && state == 0){
-    Serial.println(getTime());
+  if (((getTimeHours() == 6)||(getTimeHours() == 12)||(getTimeHours() == 18)||(getTimeHours() == 0)) && state == 0 && state_1 == 0){
+    Serial.println(getTimeHours());
     Serial.println("Turn on");
     state = 1;
+    last_time_1 = getTimeMinutes();
   }
-  if ((getTime() - last_time_1 >= (run_time + wait_time)) && state == 1){
-    Serial.println(getTime());
+  if ((getTimeMinutes() - last_time_1 >= run_time) && state == 1){
+    Serial.println(getTimeMinutes());
     Serial.println("Turn off");
     state = 0;
-    last_time_1 = getTime();
-    Serial.println("Last time :");
-    Serial.println(last_time_1);
-    
+    state_1 = 1;
+//    last_time_1 = getTime();
+//    Serial.println("Last time :");
+//    Serial.println(last_time_1);   
   }
-  if ((getTime() - last_time_1) < 0){
-    int check = 60 - last_time_1 + getTime();
-    if ((check > wait_time) && state == 0){
-      Serial.println(getTime());
-      Serial.println("Turn on");
-      state = 1;
-    }
-    if(check > (run_time + wait_time) && state == 1){
-      Serial.println(getTime());
-      Serial.println("Turn off");
-      state = 0;
-      last_time_1 = getTime(); 
-    }
-  }
+  else state_1 = 0;
+//  if ((getTime() - last_time_1) < 0){
+//    int check = 60 - last_time_1 + getTime();
+//    if ((check > wait_time) && state == 0){
+//      Serial.println(getTime());
+//      Serial.println("Turn on");
+//      state = 1;
+//    }
+//    if(check > (run_time + wait_time) && state == 1){
+//      Serial.println(getTime());
+//      Serial.println("Turn off");
+//      state = 0;
+//      last_time_1 = getTime(); 
+//    }
+//  }
   
   int value = HIGH;
   if(state == 0){
