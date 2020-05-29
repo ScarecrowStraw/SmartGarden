@@ -4,11 +4,15 @@
 #include <WiFiUdp.h>
 
 //SSID and Password of your WiFi router
-const char* ssid = "000000000";
-const char* password = "11112222";
+const char* ssid = "TP-Link_C78F";
+const char* password = "0123456@";
 
-int wait_time = 2;
+int check = 4;
 int run_time = 10;
+int hours[check] = {15, 15, 15, 15};
+int minutes[check] = {10, 15, 20, 25};
+
+int LED = 16; // GPIO16 (D0)
 
 const long utcOffsetInSeconds = 7*3600;
 
@@ -18,17 +22,16 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
 
-int getTime() {
-//  Serial.print(daysOfTheWeek[timeClient.getDay()]);
-//  Serial.print(", ");
-//  Serial.print(timeClient.getHours());
-//  Serial.print(":");
-//  Serial.print(timeClient.getMinutes());
-//  Serial.print(":");
-//  Serial.println(timeClient.getSeconds());
-//  server.send(200, "text/plain", String(timeClient.getFormattedTime()) + "\t" + String(daysOfTheWeek[timeClient.getDay()]));
-  int something = timeClient.getMinutes();
-  return something;
+WiFiServer server(80);
+
+void getTime() {
+  Serial.print(daysOfTheWeek[timeClient.getDay()]);
+  Serial.print(", ");
+  Serial.print(timeClient.getHours());
+  Serial.print(":");
+  Serial.print(timeClient.getMinutes());
+  Serial.print(":");
+  Serial.println(timeClient.getSeconds());
 }
 
 
@@ -52,36 +55,26 @@ void setup() {
   Serial.println(WiFi.localIP());  //IP address assigned to your ESP
   
   timeClient.begin();
-  Serial.println(getTime());
+  getTime();
+  pinMode(LED, OUTPUT);
+  digitalWrite(LED, LOW);
 }
 
-int last_time_1 = getTime();
-//int last_time_2 = getTime();
 int state = 0;
 void loop() {
   timeClient.update();
-  if ((timeClient.getHours() == 6) && (timeClient.getMinutes() == 0) && (timeClient.getSeconds() == 0)){
-    Serial.println("Turn on");
+  getTime();
+
+  int i = 0;
+  for (i = 0; i< check; i++){
+    if ((timeClient.getHours() == hours[i]) && (timeClient.getMinutes() == minutes[i]) && (timeClient.getSeconds() == 0)){
+      Serial.println("Turn on");
+      digitalWrite(LED, HIGH);
+    }
+    if ((timeClient.getHours() == hours[i]) && (timeClient.getMinutes() == minutes[i]) && (timeClient.getSeconds() >= run_time)){
+      Serial.println("Turn off");
+      digitalWrite(LED, LOW);
+    }
   }
-  if ((timeClient.getHours() == 6) && (timeClient.getMinutes() == 0) && (timeClient.getSeconds() >= run_time){
-    Serial.println("Turn off");
-  }
-  if ((timeClient.getHours() == 12) && (timeClient.getMinutes() == 0) && (timeClient.getSeconds() == 0)){
-    Serial.println("Turn on");
-  }
-  if ((timeClient.getHours() == 12) && (timeClient.getMinutes() == 0) && (timeClient.getSeconds() >= run_time){
-    Serial.println("Turn off");
-  }
-  if ((timeClient.getHours() == 18) && (timeClient.getMinutes() == 0) && (timeClient.getSeconds() == 0)){
-    Serial.println("Turn on");
-  }
-  if ((timeClient.getHours() == 18) && (timeClient.getMinutes() == 0) && (timeClient.getSeconds() >= run_time){
-    Serial.println("Turn off");
-  }
-  if ((timeClient.getHours() == 0) && (timeClient.getMinutes() == 0) && (timeClient.getSeconds() == 0)){
-    Serial.println("Turn on");
-  }
-  if ((timeClient.getHours() == 0) && (timeClient.getMinutes() == 0) && (timeClient.getSeconds() >= run_time){
-    Serial.println("Turn off");
-  }
+  delay(1000);
 }
