@@ -92,19 +92,7 @@ void loop(){
   client.println("<br><br>");
   client.println("<a href=\"/LED=ON\"\"><button>ON</button></a>");
   client.println("<a href=\"/LED=OFF\"\"><button>OFF</button></a><br />");
-//  client.print(String(p_tm->tm_mday));
-//  client.print("/");
-//  client.print(String(p_tm->tm_mon + 1));
-//  client.print("/");
-//  client.print(String(p_tm->tm_year + 1900));
-//  
-//  client.print(" ");
-//  
-//  client.print(String(p_tm->tm_hour));
-//  client.print(":");
-//  client.print(String(p_tm->tm_min));
-//  client.print(":");
-//  client.println(String(p_tm->tm_sec));
+
   client.println("</html>");
   
   delay(1);

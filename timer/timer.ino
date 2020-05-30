@@ -7,10 +7,11 @@
 const char* ssid = "TP-Link_C78F";
 const char* password = "0123456@";
 
-int check = 4;
+#define check 4
+
 int run_time = 10;
-int hours[check] = {15, 15, 15, 15};
-int minutes[check] = {10, 15, 20, 25};
+int hours[check] = {9, 9, 9, 9};
+int minutes[check] = {10, 15, 23, 27};
 
 int LED = 16; // GPIO16 (D0)
 
