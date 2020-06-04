@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">demo</string>
+    <string name="button">Button</string>
+    <string name="on_off">on/off</string>
+    <string name="b_t_t_t">Bật Tắt</string>
+    <string name="wifi">Wifi</string>
+    <string name="i_u_khi_n">Điều khiển</string>
+    <string name="tr_ng_th_i">trạng thái</string>
+    <string name="hen_gio">hen gio</string>
+    <string name="textview">TextView</string>
+    <string name="vong_lap">vong lap</string>
+</resources>
