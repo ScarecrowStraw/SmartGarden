@@ -17,5 +17,5 @@ void loop(){
   delay(1000*run_time);
   digitalWrite(relay, LOW);
   Serial.println("Turn off");
-  delay(1000*3600*wait_time);
+  delay(1000*3600*wait_time - 1000*run_time);
 }
