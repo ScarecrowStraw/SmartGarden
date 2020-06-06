@@ -8,44 +8,48 @@
 
     <TimePicker
         android:id="@+id/Timepicker"
-        android:layout_width="294dp"
-        android:layout_height="354dp"
+        android:layout_width="254dp"
+        android:layout_height="170dp"
+        android:timePickerMode="spinner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.411"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.103"/>
+        app:layout_constraintVertical_bias="0.074" />
+
+    <TimePicker
+        android:id="@+id/Timepicker2"
+        android:layout_width="257dp"
+        android:layout_height="127dp"
+        android:timePickerMode="spinner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.422"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Timepicker"
+        app:layout_constraintVertical_bias="0.048" />
 
     <Button
         android:id="@+id/hengio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="324dp"
         android:text="@string/hen_gio"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Timepicker" />
-
-    <Spinner
-        android:id="@+id/Spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.43"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Timepicker" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="144dp"
-        android:layout_height="45dp"
+        android:layout_width="203dp"
+        android:layout_height="59dp"
         android:text="@string/textview"
-        app:layout_constraintBottom_toTopOf="@+id/hengio"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.438"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Timepicker"
-        app:layout_constraintVertical_bias="0.512" />
+        app:layout_constraintTop_toTopOf="@+id/Timepicker"
+        app:layout_constraintVertical_bias="0.612" />
 </androidx.constraintlayout.widget.ConstraintLayout>
