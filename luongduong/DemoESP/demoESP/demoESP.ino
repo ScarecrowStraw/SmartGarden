@@ -14,7 +14,7 @@
 #define DHTPIN D3
 #define DHTTYPE DHT21
 
-long TIME_SLEEP_LOOP = 10000*1;
+long TIME_SLEEP_LOOP = 10000*6;
 long COUNT = 6;
 long TIME_OUT_WATER = 0;
 long TIME_OUT_DEFAULT = 100 * 1000;
@@ -240,7 +240,6 @@ void loop() {
   
   if (WiFi.status() != WL_CONNECTED) {
     Serial.print("Set to defaut");
-
     TIME_OUT_WATER = TIME_OUT_DEFAULT;
    }
    else{
