@@ -108,7 +108,7 @@ void defaut(){
       // kiem tra tuoi
 
 void check_tuoi_cay(){
-  if(TIME_WATER_ == TIME_CHECK_SENSOR){
+  if(TIME_WATER_ == TIME_OUT_WATER){
     TIME_WATER_ = 0;
     tuoi_cay();
   }
