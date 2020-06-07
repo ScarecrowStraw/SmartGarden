@@ -21,6 +21,7 @@ long TIME_OUT_DEFAULT = 60 * 1000;
 long TIME_WATER_ = 0;
 long TIME_SENSOR_ = 0;
 long TIME_CHECK_SENSOR = 300 * 1000;
+long TIME_FERTILIZE = 1000*3600;
 
 const long utcOffsetInSeconds = 7*3600;
 
@@ -99,7 +100,8 @@ void setup() {
 
 int hour = timeClient.getHours();
 int minutes = timeClient.getMinutes();
-
+String ngay = daysOfTheWeek[timeClient.getDay()];
+      
       // get Time
 
 void getTime() {
@@ -120,13 +122,14 @@ void tuoi_cay(){
   
     TIME_WATER_ = 0;
     digitalWrite(red, HIGH);
-    
+    digitalWrite(relay1, HIGH);
     delay(1000*run_time);
   
     digitalWrite(red, 0);
-    
+    digitalWrite(relay1,0);
 }      
-// defaut 
+  
+  // Defaut 
 
 void defaut(){
   
@@ -135,7 +138,7 @@ void defaut(){
       tuoi_cay();
   }
 }
-      // che do online
+      // Che do online
 
 void mode_1(){
     
@@ -166,15 +169,24 @@ void mode_1(){
         tuoi_cay();
        }
 
-   //
-    
+   // Chon ngay bon phan
+      String lichbon = object.getString("lich");
+
+      if (lichbon == ngay && hour == 22 && minutes == 45){
+        digitalWrite(relay2, HIGH);
+        digitalWrite(red, HIGH);
+        delay (1000*run_time);
+        digitalWrite(red, 0);
+        digitalWrite(relay2, 0);
+        delay (TIME_FERTILIZE);
+      }
    if (Firebase.failed()){
      Serial.println(Firebase.error());
      return;
     }   
 }
  
-    // check cam bien
+    // Check cam bien
     
 void check_sensor(){
      if(TIME_SENSOR_ == TIME_CHECK_SENSOR){
@@ -182,7 +194,8 @@ void check_sensor(){
      doc_cam_bien();
     }
 }
-      // kiem tra dieu kien tuoi cua cam bien
+      
+      // Kiem tra dieu kien tuoi cua cam bien
 
 void doc_cam_bien(){
     if ( value < 500 && t < 30){
