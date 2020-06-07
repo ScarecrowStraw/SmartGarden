@@ -15,10 +15,9 @@
 #define DHTTYPE DHT21
 
 long TIME_SLEEP_LOOP = 10000*6;
-long COUNT = 6;
+
 long TIME_OUT_WATER = 0;
-long TIME_OUT_DEFAULT = 100 * 1000;
-long CURRENT_TIME_DEFAULT_SLEEP = 0;
+long TIME_OUT_DEFAULT = 60 * 1000;
 long TIME_WATER_ = 0;
 long TIME_SENSOR_ = 0;
 long TIME_CHECK_SENSOR = 300 * 1000;
@@ -98,22 +97,6 @@ void setup() {
   pinMode(A0, INPUT);
 }
 
-      // defaut 
-
-void defaut(){
-  if(TIME_WATER_ == TIME_OUT_DEFAULT){
-      tuoi_cay();
-  }
-}
-      // kiem tra tuoi
-
-void check_tuoi_cay(){
-  if(TIME_WATER_ == TIME_OUT_WATER){
-    TIME_WATER_ = 0;
-//     tuoi_cay();
-  }
-}
-
 int hour = timeClient.getHours();
 int minutes = timeClient.getMinutes();
 
@@ -134,21 +117,30 @@ void getTime() {
       // Tuoi cay
 
 void tuoi_cay(){
-    digitalWrite(red, 0);
+  
+    TIME_WATER_ = 0;
+    digitalWrite(red, HIGH);
     
     delay(1000*run_time);
   
-    digitalWrite(red, HIGH);
+    digitalWrite(red, 0);
     
-}
+}      
+// defaut 
 
+void defaut(){
+  
+  if(TIME_WATER_ >= TIME_OUT_DEFAULT){
+    Serial.print("tuoi");
+      tuoi_cay();
+  }
+}
       // che do online
 
 void mode_1(){
     
     timeClient.update();
     getTime();
-    //set_time_out_water(8);
     FirebaseObject object = Firebase.get("/");
     
     Firebase.setFloat("LightMeter: ",lux);
@@ -164,22 +156,16 @@ void mode_1(){
     
     if (timegio == hour  && timephut == minutes){
         Serial.print("ab");
-        digitalWrite(red, HIGH);
-        delay(1000*5);
+        tuoi_cay();
     }
-    else{
-        digitalWrite(red, LOW);
-    }
+
     int timegio2 = object.getInt("gio2");
     int timephut2 = object.getInt("phut2");
     
     if (timegio2 == hour  && timephut2 == minutes){
-        digitalWrite(red, HIGH);
-        delay(1000*5);
+        tuoi_cay();
        }
-    else{
-        digitalWrite(red, LOW);
-    }
+
    //
     
    if (Firebase.failed()){
@@ -196,25 +182,18 @@ void check_sensor(){
      doc_cam_bien();
     }
 }
-      // kiem tra tuoi cua cam bien
+      // kiem tra dieu kien tuoi cua cam bien
 
 void doc_cam_bien(){
-    
     if ( value < 500 && t < 30){
-        digitalWrite (red, HIGH);
-        delay (1000*5);
-        digitalWrite (red, 0);
+        tuoi_cay();
     }
     if ( value > 500 && t > 30){
-      digitalWrite (red,HIGH);
-      delay(1000*10);
-      digitalWrite (red, 0);
+      tuoi_cay();
       
     }
     if ( value > 500 && t < 30){
-      digitalWrite (red, HIGH);
-      delay(1000*5);
-      digitalWrite (red, 0);
+      tuoi_cay();
     }
     if ( hour > 6 && hour < 18){
       if (lux < 500) {
@@ -241,18 +220,17 @@ void loop() {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.print("Set to defaut");
     TIME_OUT_WATER = TIME_OUT_DEFAULT;
-    TIME_WATER_ += TIME_SLEEP_LOOP;
+    defaut();
    }
    else{
-      
       mode_1();
    }
    
    check_sensor();
-   check_tuoi_cay();
    
    delay(TIME_SLEEP_LOOP);
    
+   TIME_WATER_ += TIME_SLEEP_LOOP;
    TIME_SENSOR_ += TIME_SLEEP_LOOP;
 
 } 
