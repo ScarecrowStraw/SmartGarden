@@ -110,7 +110,7 @@ void defaut(){
 void check_tuoi_cay(){
   if(TIME_WATER_ == TIME_OUT_WATER){
     TIME_WATER_ = 0;
-    tuoi_cay();
+//     tuoi_cay();
   }
 }
 
