@@ -23,14 +23,14 @@ import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Main2Activity extends AppCompatActivity {
+public class Main2Activity extends AppCompatActivity  {
     Button hengio;
     TimePicker timePicker;
     TimePicker timePicker2;
     TextView textView;
     Calendar calendar;
     DatabaseReference mData;
-
+    Spinner spinnertuoi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,19 @@ public class Main2Activity extends AppCompatActivity {
         timePicker = (TimePicker)findViewById(R.id.Timepicker);
         timePicker2 = (TimePicker) findViewById(R.id.Timepicker2);
         calendar = Calendar.getInstance();
+        spinnertuoi = (Spinner)findViewById(R.id.spinnertuoi);
+
+        ArrayList<String> arraydays = new ArrayList<>();
+        arraydays.add("Monday");
+        arraydays.add("Tuesday");
+        arraydays.add("Wednesday");
+        arraydays.add("Thursday");
+        arraydays.add("Friday");
+        arraydays.add("Saturday");
+        arraydays.add("Sunday");
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, arraydays);
+        spinnertuoi.setAdapter(arrayAdapter);
 
         hengio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +83,18 @@ public class Main2Activity extends AppCompatActivity {
 
                 textView.setText("Gio ban dat la: "+ string_gio + " h " + string_phut
                         + " va gio ban dat tiep theo la: " + string_gio2 + " gio " + string_phut2);
+            }
+        });
+        spinnertuoi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String lich = spinnertuoi.getSelectedItem().toString();
+                mData.child("lich").setValue(lich);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 

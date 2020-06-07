@@ -17,28 +17,12 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.249" />
-
-    <Button
-        android:id="@+id/buttonclick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="176dp"
-        android:backgroundTint="#D69595"
-        android:text="@string/on_off"
-        android:textColor="#DF0A52"
-
-        android:textColorLink="#9A1F1F"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.471"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNoiDung" />
+        app:layout_constraintVertical_bias="0.3" />
 
     <Switch
         android:id="@+id/switchWifi"
@@ -54,32 +38,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewTrangthai"
-        android:layout_width="177dp"
-        android:layout_height="46dp"
-        android:layout_marginBottom="166dp"
-        android:background="#EC0E0E"
-        android:backgroundTint="#FFC107"
-        android:text="@string/tr_ng_th_i"
-        android:textColor="#E10808"
-        android:textIsSelectable="false"
-        android:textSize="24sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonclick"
-        app:layout_constraintVertical_bias="1.0" />
-
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:text="@string/hen_gio"
+        android:layout_marginTop="112dp"
+        android:text="@string/h_n_gi_t_i_c_y"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.467"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewNoiDung" />
 
@@ -87,11 +53,12 @@
         android:id="@+id/buttonTrangthai"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tình trạng của cây"
+        android:layout_marginBottom="152dp"
+        android:text="@string/t_nh_tr_ng_c_a_c_y"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTrangthai" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!--    <TextView-->
 <!--        android:id="@+id/textView3"-->

@@ -27,7 +27,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 public class MainActivity extends AppCompatActivity {
 
     TextView txtNoidung;
-    TextView txtNoidung1;
+
 //    TextView txtDemo;
 
     Button btnClick;
@@ -47,34 +47,18 @@ public class MainActivity extends AppCompatActivity {
 
         mData = FirebaseDatabase.getInstance().getReference();
 
-//
         // ánh xạ
 
-        final Button btnClick = findViewById(R.id.buttonclick);
         final Button btnClick2= findViewById(R.id.button);
 
         final Button buttonTrangthai = findViewById(R.id.buttonTrangthai);
 
         txtNoidung = (TextView) findViewById(R.id.textViewNoiDung);
-        txtNoidung1= (TextView) findViewById(R.id.textViewTrangthai);
+
 
         swtWifi = (Switch) findViewById(R.id.switchWifi);
 
         // viết code
-        btnClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (a) {
-                    mData.child("demo").setValue("on");
-                    txtNoidung1.setText("đã mở");
-                }
-                else {
-                    mData.child("demo").setValue("off");
-                    txtNoidung1.setText("đã tắt");
-                }
-                a = !a;
-            }
-        });
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if(wifiManager.isWifiEnabled()){
