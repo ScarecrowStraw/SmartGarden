@@ -241,6 +241,7 @@ void loop() {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.print("Set to defaut");
     TIME_OUT_WATER = TIME_OUT_DEFAULT;
+    TIME_WATER_ += TIME_SLEEP_LOOP;
    }
    else{
       
@@ -252,7 +253,6 @@ void loop() {
    
    delay(TIME_SLEEP_LOOP);
    
-   TIME_WATER_ += TIME_SLEEP_LOOP;
    TIME_SENSOR_ += TIME_SLEEP_LOOP;
 
 } 
