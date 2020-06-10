@@ -9,6 +9,9 @@ void setup(){
   Serial.begin(9600);
   pinMode(relay, OUTPUT);
   digitalWrite(relay, LOW);
+  digitalWrite(relay, HIGH);
+  delay(1000*runtime);
+  delay(1000*3600*4);
 }
 
 void loop(){
