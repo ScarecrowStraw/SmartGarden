@@ -6,7 +6,6 @@ void setup(){
   Serial.begin(9600);
   pinMode(relay, OUTPUT);
   digitalWrite(relay, LOW);
-<<<<<<< HEAD
   Serial.println("ON");
   delay(1000*5);
   digitalWrite(relay, HIGH);
