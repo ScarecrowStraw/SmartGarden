@@ -1,21 +1,37 @@
 #include <ESP8266WiFi.h>
 
-int wait_time = 6;
-int run_time = 5;
-
-int relay = 16; // GPIO 16 (D0)
+int relay = D0;
 
 void setup(){
   Serial.begin(9600);
   pinMode(relay, OUTPUT);
   digitalWrite(relay, LOW);
+  Serial.println("ON");
+  delay(1000*5);
+  digitalWrite(relay, HIGH);
+  Serial.println("OFF");
+  int i = 0;
+  for( i = 0; i<4; i++){
+    delay(1000*3600);
+  }
 }
 
 void loop(){
-  digitalWrite(relay, HIGH);
-  Serial.println("Turn on");
-  delay(1000*run_time);
   digitalWrite(relay, LOW);
-  Serial.println("Turn off");
-  delay(1000*3600*wait_time - 1000*run_time);
+  delay(5*1000);
+  digitalWrite(relay, HIGH);
+  for(int i = 0; i < 6; i++){
+    delay(1000*3600);
+  }
+  
+  digitalWrite(relay, LOW);
+  delay(5*1000);
+  digitalWrite(relay, HIGH);
+  for(int i = 0; i < 18; i++){
+    delay(1000*3600);
+  }
 }
+
+
+
+
