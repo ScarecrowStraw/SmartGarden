@@ -14,6 +14,9 @@ void setup(){
   for( i = 0; i<4; i++){
     delay(1000*3600);
   }
+  digitalWrite(relay, HIGH);
+  delay(1000*runtime);
+  delay(1000*3600*4);
 }
 
 void loop(){

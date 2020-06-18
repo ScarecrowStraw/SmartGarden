@@ -25,5 +25,13 @@
     <string name="t_gi_t_i_l_n_th_2">Đặt giờ tưới lần thứ 2</string>
     <string name="t_gi_t_i_l_n_th_nh_t">Đặt giờ tưới lần thứ nhất</string>
     <string name="t_l_ch_b_n_ph_n">Đặt Lịch Bón Phân</string>
+    <string name="m_kh_ng_kh">Độ ẩm không khí</string>
+    <string name="nhi_t_kh_ng_kh">Nhiệt độ không khí</string>
+    <string name="m_t">Độ ẩm đất</string>
+    <string name="textviewnhietdo">TextViewNhietdo</string>
+    <string name="textview1doamkk">TextViewDoamkk</string>
+    <string name="textviewdoamdat">TextViewDoamdat</string>
+    <string name="textviewanhsang">TextViewAnhsang</string>
+    <string name="c_ng_nh_s_ng">Cường độ ánh sáng</string>
 
 </resources>

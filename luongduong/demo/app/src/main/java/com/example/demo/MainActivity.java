@@ -88,6 +88,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        buttonTrangthai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Main3Activity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }

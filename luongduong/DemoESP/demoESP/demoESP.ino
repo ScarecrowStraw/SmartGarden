@@ -5,15 +5,16 @@
 #include <BH1750.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
+#include <ESP8266WiFi.h>
 
 #define FIREBASE_HOST "demo1-c11e3.firebaseio.com"
 #define FIREBASE_AUTH ""  
 #define WIFI_SSID "TP-Link_C78F"   
-#define WIFI_PASSWORD "0123456@"
+#define WIFI_PASSWORD "0123456@!"
 #define DHTPIN D3
 #define DHTTYPE DHT21
 
-long TIME_SLEEP_LOOP = 10000*6;
+long TIME_SLEEP_LOOP = 1000*60;
 
 long TIME_OUT_WATER = 0;
 long TIME_OUT_DEFAULT = 60 * 1000;
@@ -137,7 +138,7 @@ void defaut(){
   
   if(TIME_WATER_ >= TIME_OUT_DEFAULT){
     Serial.print("tuoi");
-      tuoi_cay(5);
+      tuoi_cay(60);
   }
 }
       // Che do online
@@ -148,7 +149,7 @@ void mode_1(){
     getTime();
     FirebaseObject object = Firebase.get("/");
     
-    Firebase.setFloat("LightMeter: ",lux);
+    Firebase.setFloat("LightMeter",lux);
     Firebase.setInt("DoAmDat_STATUS", value);
     Firebase.setFloat("Humidity_STATUS", h);
     Firebase.setFloat("Temperature_STATUS", t);
@@ -161,14 +162,14 @@ void mode_1(){
     Serial.println(lichbon);
     Serial.println(ngay);   
     if (timegio == hour  && timephut == minutes){
-        tuoi_cay(5);
+        tuoi_cay(60);
     }
 
     int timegio2 = object.getInt("gio2");
     int timephut2 = object.getInt("phut2");
     
     if (timegio2 == hour  && timephut2 == minutes && lichbon != ngay){
-        tuoi_cay(5);
+        tuoi_cay(60);
     }
 
    // Chon ngay bon phan
@@ -202,13 +203,13 @@ void check_sensor(){
 
 void doc_cam_bien(){
     if ( value < 500 && t < 30){
-        tuoi_cay(5);
+        tuoi_cay(60);
     }
     if ( value > 500 && t > 30){
-        tuoi_cay(3);
+        tuoi_cay(60);
     }
     if ( value > 500 && t < 30){
-        tuoi_cay(5);
+        tuoi_cay(60);
     }
     if ( hour > 6 && hour < 18){
       if (lux < 500) {
