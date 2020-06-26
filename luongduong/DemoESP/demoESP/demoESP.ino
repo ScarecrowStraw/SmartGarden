@@ -15,12 +15,12 @@
 #define DHTTYPE DHT21
 
 long TIME_SLEEP_LOOP = 1000*60;
+long TIME_OUT_DEFAULT = 60 * 1000;
+long TIME_CHECK_SENSOR = 3600 * 1000;
 
 long TIME_OUT_WATER = 0;
-long TIME_OUT_DEFAULT = 60 * 1000;
 long TIME_WATER_ = 0;
 long TIME_SENSOR_ = 0;
-long TIME_CHECK_SENSOR = 3600 * 1000;
 
 const long utcOffsetInSeconds = 7*3600;
 
@@ -28,6 +28,7 @@ float lux=0;
 int value = 0;
 float h = 0;
 float t = 0;
+float percent = 0;
 
 int red = D6;
 int led = D7;
@@ -80,6 +81,7 @@ void setup() {
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
  
   Wire.begin();
+  
   if (lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE)) {
     Serial.println(F("BH1750 Advanced begin"));
   }
@@ -121,7 +123,9 @@ void getTime() {
       // Tuoi cay
 
 void tuoi_cay(int run_time){
-  
+    digitalWrite(relay2, 0);
+    digitalWrite(relay1, 0);
+    
     TIME_WATER_ = 0;
     digitalWrite(red, HIGH);
     digitalWrite(relay1, HIGH);
@@ -137,8 +141,7 @@ void tuoi_cay(int run_time){
 void defaut(){
   
   if(TIME_WATER_ >= TIME_OUT_DEFAULT){
-    Serial.print("tuoi");
-      tuoi_cay(60);
+       tuoi_cay(15);
   }
 }
       // Che do online
@@ -150,7 +153,7 @@ void mode_1(){
     FirebaseObject object = Firebase.get("/");
     
     Firebase.setFloat("LightMeter",lux);
-    Firebase.setInt("DoAmDat_STATUS", value);
+    Firebase.setInt("DoAmDat_STATUS", percent);
     Firebase.setFloat("Humidity_STATUS", h);
     Firebase.setFloat("Temperature_STATUS", t);
 
@@ -159,29 +162,26 @@ void mode_1(){
     int timephut = object.getInt("phut");
     
     String lichbon = object.getString("lich");
-    Serial.println(lichbon);
-    Serial.println(ngay);   
+   
     if (timegio == hour  && timephut == minutes){
-        tuoi_cay(60);
+        tuoi_cay(15);
     }
 
     int timegio2 = object.getInt("gio2");
     int timephut2 = object.getInt("phut2");
     
     if (timegio2 == hour  && timephut2 == minutes && lichbon != ngay){
-        tuoi_cay(60);
+        tuoi_cay(15);
     }
 
    // Chon ngay bon phan
    if (lichbon == ngay && timegio2 == hour && timephut2 == minutes){
         digitalWrite(relay2, HIGH);
         digitalWrite(red, HIGH);
-        Serial.print("bat relay2");
-        delay (1000*5);
+        delay (1000*15);
         
         digitalWrite(red, 0);
         digitalWrite(relay2, 0);
-        Serial.print("tat relay2");
       }
       
    if (Firebase.failed()){
@@ -202,15 +202,19 @@ void check_sensor(){
       // Kiem tra dieu kien tuoi cua cam bien
 
 void doc_cam_bien(){
-    if ( value < 500 && t < 30){
-        tuoi_cay(60);
+    if ( percent < 50 && t > 30){
+        tuoi_cay(15);
     }
-    if ( value > 500 && t > 30){
-        tuoi_cay(60);
+    else if ( percent > 50 && t < 30){
+        tuoi_cay(10);
     }
-    if ( value > 500 && t < 30){
-        tuoi_cay(60);
+    else if ( h < 50 && t < 30){
+        tuoi_cay(5);
     }
+    else if (h < 50 && t > 30){
+      tuoi_cay(5);
+    }
+    
     if ( hour > 6 && hour < 18){
       if (lux < 500) {
         digitalWrite (led, HIGH);
@@ -219,6 +223,7 @@ void doc_cam_bien(){
         digitalWrite (led, 0);
       }
     }
+    
     if (hour < 6 || hour > 18){
         digitalWrite (led, 0);
     }
@@ -228,6 +233,7 @@ void doc_cam_bien(){
 void loop() {
    lux = lightMeter.readLightLevel();
    value = analogRead(A0);
+   percent = map(value, 0, 1023, 0, 100);
    h = dht.readHumidity();
    t = dht.readTemperature();
   

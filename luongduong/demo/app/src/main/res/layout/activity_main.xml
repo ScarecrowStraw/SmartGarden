@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#03A9F4"
+    android:orientation="vertical"
+    android:background="@drawable/farm"
     tools:context=".MainActivity">
 
     <TextView
+        android:layout_marginLeft="140dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/textViewNoiDung"
         android:layout_width="116dp"
         android:layout_height="61dp"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
         android:background="#73A5CD"
         android:text="@string/i_u_khi_n"
         android:textColor="#FF5722"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+         />
 
     <Switch
+        android:visibility="invisible"
         android:id="@+id/switchWifi"
         android:layout_width="109dp"
         android:layout_height="61dp"
@@ -33,21 +32,17 @@
         android:backgroundTint="#F4DC09"
         android:text="@string/wifi"
         android:textColor="#ED0252"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.11"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+         />
 
     <Button
+        android:padding="10dp"
+        android:background=""
         android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_marginTop="112dp"
         android:text="@string/h_n_gi_t_i_c_y"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNoiDung" />
+         />
 
     <Button
         android:id="@+id/buttonTrangthai"
@@ -55,10 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="152dp"
         android:text="@string/t_nh_tr_ng_c_a_c_y"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
+         />
 
     <!--    <TextView-->
 <!--        android:id="@+id/textView3"-->
@@ -70,4 +62,4 @@
 <!--        tools:layout_editor_absoluteX="176dp" />-->
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
