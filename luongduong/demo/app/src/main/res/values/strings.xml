@@ -33,5 +33,6 @@
     <string name="textviewdoamdat">TextViewDoamdat</string>
     <string name="textviewanhsang">TextViewAnhsang</string>
     <string name="c_ng_nh_s_ng">Cường độ ánh sáng</string>
+    <string name="todo">TODO</string>
 
 </resources>

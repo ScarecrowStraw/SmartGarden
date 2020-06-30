@@ -16,7 +16,7 @@
 
 long TIME_SLEEP_LOOP = 1000*60;
 long TIME_OUT_DEFAULT = 60 * 1000;
-long TIME_CHECK_SENSOR = 3600 * 1000;
+long TIME_CHECK_SENSOR = 360 * 1000;
 
 long TIME_OUT_WATER = 0;
 long TIME_WATER_ = 0;
@@ -38,7 +38,7 @@ int relay2 = D5;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
    
 DHT dht(DHTPIN, DHTTYPE);
-BH1750 lightMeter(0x23);
+BH1750 lightMeter;
   
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
@@ -74,6 +74,7 @@ byte igrasia[8] = //icon for water droplet
 void setup() {
   ESP.eraseConfig();
   Serial.begin(9600);
+  
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   if(WiFi.status() == WL_CONNECTED){
     Serial.print("Connected");
@@ -81,6 +82,7 @@ void setup() {
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
  
   Wire.begin();
+  lightMeter.begin();
   
   if (lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE)) {
     Serial.println(F("BH1750 Advanced begin"));
@@ -152,7 +154,7 @@ void mode_1(){
     getTime();
     FirebaseObject object = Firebase.get("/");
     
-    Firebase.setFloat("LightMeter",lux);
+    Firebase.setFloat("LightMeter: ",lux);
     Firebase.setInt("DoAmDat_STATUS", percent);
     Firebase.setFloat("Humidity_STATUS", h);
     Firebase.setFloat("Temperature_STATUS", t);
@@ -164,14 +166,14 @@ void mode_1(){
     String lichbon = object.getString("lich");
    
     if (timegio == hour  && timephut == minutes){
-        tuoi_cay(15);
+        tuoi_cay(30);
     }
 
     int timegio2 = object.getInt("gio2");
     int timephut2 = object.getInt("phut2");
     
     if (timegio2 == hour  && timephut2 == minutes && lichbon != ngay){
-        tuoi_cay(15);
+        tuoi_cay(30);
     }
 
    // Chon ngay bon phan
@@ -205,22 +207,21 @@ void doc_cam_bien(){
     if ( percent < 50 && t > 30){
         tuoi_cay(15);
     }
-    else if ( percent > 50 && t < 30){
+    else if ( percent < 50 && t < 30){
         tuoi_cay(10);
-    }
-    else if ( h < 50 && t < 30){
-        tuoi_cay(5);
     }
     else if (h < 50 && t > 30){
       tuoi_cay(5);
     }
     
-    if ( hour > 6 && hour < 18){
+    if ( hour > 6 && hour < 19){
       if (lux < 500) {
         digitalWrite (led, HIGH);
+        Serial.println("bat den");
       }
       if (lux > 500){
         digitalWrite (led, 0);
+        Serial.println("tat den");
       }
     }
     
@@ -233,7 +234,7 @@ void doc_cam_bien(){
 void loop() {
    lux = lightMeter.readLightLevel();
    value = analogRead(A0);
-   percent = map(value, 0, 1023, 0, 100);
+   percent = map(value, 1023, 0, 0, 100);
    h = dht.readHumidity();
    t = dht.readTemperature();
   
@@ -248,6 +249,7 @@ void loop() {
    }
    else{
       mode_1();
+      Serial.print(lux);
    }
    
    check_sensor();
